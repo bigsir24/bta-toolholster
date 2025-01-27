@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "toolholster",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This mod aims to help new BTA modders.",
+  "name": "Tool Holster",
+  "description": "A simple mod for Better Than Adventure that displays your last equipped tool.",
   "authors": [
-    "Turnip Labs"
+    "Big Sir"
   ],
   "contact": {
-    "homepage": "",
+    "homepage": "https://modrinth.com/project/tool-holster",
     "sources": ""
   },
 
@@ -19,25 +19,26 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-			"turniplabs.examplemod.ExampleMod"
+			"bigsir.toolholster.ToolHolster"
     ],
 		"beforeGameStart": [
-			"turniplabs.examplemod.ExampleMod"
+			"bigsir.toolholster.ToolHolster"
 		],
 		"afterGameStart": [
-			"turniplabs.examplemod.ExampleMod"
+			"bigsir.toolholster.ToolHolster"
 		],
 		"recipesReady": [
-			"turniplabs.examplemod.ExampleMod"
+			"bigsir.toolholster.ToolHolster"
 		]
 	},
   "mixins": [
-      "examplemod.mixins.json"
+      "toolholster.mixins.json"
   ],
 
   "depends": {
-		"minecraft": "*",
-    "fabricloader": ">=0.15.5"
+		"minecraft": "^7.3",
+    "fabricloader": ">=0.15.5",
+    "halplibe": ">=5.0.0"
   },
   "suggests": {
   }
