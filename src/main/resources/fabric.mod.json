@@ -21,14 +21,11 @@
     "main": [
 			"bigsir.toolholster.ToolHolster"
     ],
-		"beforeGameStart": [
-			"bigsir.toolholster.ToolHolster"
+		"afterClientStart": [
+			"bigsir.toolholster.THClient"
 		],
-		"afterGameStart": [
-			"bigsir.toolholster.ToolHolster"
-		],
-		"recipesReady": [
-			"bigsir.toolholster.ToolHolster"
+		"beforeClientStart": [
+			"bigsir.toolholster.THClient"
 		]
 	},
   "mixins": [
@@ -37,8 +34,8 @@
 
   "depends": {
 		"minecraft": "^7.3",
-    "fabricloader": ">=0.15.5",
-    "halplibe": ">=5.0.0"
+    "fabricloader": ">=0.15.6-beta",
+    "halplibe": ">=5.2.4"
   },
   "suggests": {
   }

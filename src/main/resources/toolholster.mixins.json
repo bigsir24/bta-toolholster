@@ -4,8 +4,13 @@
   "package": "bigsir.toolholster.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "ContainerInventoryMixin",
+    "ItemStackMixin",
+    "MenuAbstractMixin",
+    "PlayerMixin"
   ],
   "client": [
+    "CubeAccessor",
     "MobRendererPlayerMixin"
   ],
   "injectors": {
