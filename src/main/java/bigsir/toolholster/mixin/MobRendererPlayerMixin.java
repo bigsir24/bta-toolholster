@@ -46,10 +46,6 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/core/player/inventory/container/ContainerInventory;getCurrentItem()Lnet/minecraft/core/item/ItemStack;")
 	)
 	public void renderItem(Player player, float partialTick, CallbackInfo ci){
-		if(Minecraft.getMinecraft().currentWorld instanceof WorldClientMP){
-			System.out.println(Minecraft.getMinecraft().getSendQueue().playerList.get(player.nickname));
-		}
-
 		PlayerData data =  modelCache.get(player.uuid);
 		if(data == null) modelCache.put(player.uuid, data = new PlayerData());
 
