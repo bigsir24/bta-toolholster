@@ -1,16 +1,10 @@
 package bigsir.toolholster.mixin;
 
-import bigsir.toolholster.ToolHolster;
-import bigsir.toolholster.client.Pointer;
+import bigsir.toolholster.core.data.Pointer;
 import bigsir.toolholster.interfaces.IPointerStorage;
-import com.mojang.nbt.tags.CompoundTag;
 import net.minecraft.core.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ItemStack.class, remap = false)
 public abstract class ItemStackMixin implements IPointerStorage<ItemStack> {

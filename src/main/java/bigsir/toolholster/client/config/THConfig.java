@@ -2,12 +2,11 @@ package bigsir.toolholster.client.config;
 
 import bigsir.toolholster.client.config.setup.Config;
 import bigsir.toolholster.client.config.setup.IModConfig;
+import bigsir.toolholster.core.data.ItemConfig;
 import net.minecraft.core.item.Item;
 import net.minecraft.core.util.collection.NamespaceID;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class THConfig implements IModConfig {
 	public boolean mirrorRender = false;
@@ -24,9 +23,10 @@ public class THConfig implements IModConfig {
 	public static final Config<THConfig> configWrapper = new Config<>(new THConfig());
 	public static THConfig instance;
 	public static final Map<UUID, byte[]> serverData = new HashMap<>();
+	private static final List<ItemConfig> configList = new ArrayList<>();
 
 	@Override
-	public void init(){
+	public void init() {
 		instance = configWrapper.getConfig();
 
 		for(ConfigData data : holsteredItems){
@@ -41,6 +41,12 @@ public class THConfig implements IModConfig {
 						int offsetId = entry.getValue().id-16384;
 						int byteData = 1 | (data.full3d ? MASK_3D : 0);
 						HOLSTERED_ITEM[offsetId] = (byte) byteData;
+
+						ItemConfig config = new ItemConfig(entry.getValue().id)
+							.setFull3D(data.full3d)
+							.setMirrored(false)
+							.setSide(data.side); //FIXME
+						configList.add(config);
 					}
 				}
 
@@ -56,11 +62,20 @@ public class THConfig implements IModConfig {
 				int byteData = 1 | (data.full3d ? MASK_3D : 0);
 				HOLSTERED_ITEM[offsetId] = (byte) byteData;
 
+				ItemConfig config = new ItemConfig(item.id)
+					.setFull3D(data.full3d)
+					.setMirrored(false)
+					.setSide(data.side); //FIXME
+				configList.add(config);
 			}
 		}
 
 		//Array no longer used so it can be nulled
 		//holsteredItems = null;
+	}
+
+	public static List<ItemConfig> getConfigList() {
+		return configList;
 	}
 
 	public static boolean isHolstered(int id, UUID uuid){
@@ -86,6 +101,7 @@ public class THConfig implements IModConfig {
 	public static class ConfigData {
 		public String namespaceId;
 		boolean full3d = false;
+		boolean side = false;
 
 		public ConfigData(String namespaceId){
 			this.namespaceId = namespaceId;

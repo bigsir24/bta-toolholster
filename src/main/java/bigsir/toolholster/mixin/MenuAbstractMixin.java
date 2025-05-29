@@ -1,7 +1,7 @@
 package bigsir.toolholster.mixin;
 
 import bigsir.toolholster.ToolHolster;
-import bigsir.toolholster.client.Pointer;
+import bigsir.toolholster.core.data.Pointer;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.InventoryAction;
 import net.minecraft.core.entity.player.Player;

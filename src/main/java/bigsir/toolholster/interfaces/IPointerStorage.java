@@ -1,7 +1,6 @@
 package bigsir.toolholster.interfaces;
 
-import bigsir.toolholster.client.PlayerData;
-import bigsir.toolholster.client.Pointer;
+import bigsir.toolholster.core.data.Pointer;
 
 public interface IPointerStorage<T> {
 	Pointer<T> getPointer();

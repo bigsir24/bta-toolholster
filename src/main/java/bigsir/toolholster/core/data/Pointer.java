@@ -1,15 +1,21 @@
-package bigsir.toolholster.client;
+package bigsir.toolholster.core.data;
 
 import bigsir.toolholster.ToolHolster;
+import bigsir.toolholster.interfaces.IPointerListener;
 import bigsir.toolholster.interfaces.IPointerStorage;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class Pointer<T> /*T should implement IPointerStorage*/ {
-	private T item;
+	private @Nullable T item;
+	private @Nullable IPointerListener listener;
 
 	public T get() {
 		return item;
+	}
+
+	public Pointer<T> withListener(IPointerListener listener) {
+		this.listener = listener;
+		return this;
 	}
 
 	public void set(T item) {
@@ -46,6 +52,7 @@ public final class Pointer<T> /*T should implement IPointerStorage*/ {
 		if (pointer == null) return;
 
 		pointer.item = null;
+		if(pointer.listener != null) pointer.listener.onChange();
 	}
 
 	public static <T> void transfer(@Nullable Pointer<T> ptr, @Nullable IPointerStorage<T> from, @Nullable IPointerStorage<T> to) {

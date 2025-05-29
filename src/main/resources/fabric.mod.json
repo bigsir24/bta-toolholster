@@ -22,10 +22,16 @@
 			"bigsir.toolholster.ToolHolster"
     ],
 		"afterClientStart": [
-			"bigsir.toolholster.THClient"
+			"bigsir.toolholster.client.THClient"
 		],
 		"beforeClientStart": [
-			"bigsir.toolholster.THClient"
+			"bigsir.toolholster.client.THClient"
+		],
+		"afterGameStart": [
+			"bigsir.toolholster.ToolHolster"
+		],
+		"beforeGameStart": [
+			"bigsir.toolholster.ToolHolster"
 		]
 	},
   "mixins": [

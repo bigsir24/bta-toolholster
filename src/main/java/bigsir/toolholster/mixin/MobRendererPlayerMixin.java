@@ -1,8 +1,10 @@
 package bigsir.toolholster.mixin;
 
-import bigsir.toolholster.client.PlayerData;
+import bigsir.toolholster.core.data.PlayerData;
 import bigsir.toolholster.client.config.THConfig;
+import bigsir.toolholster.interfaces.IPlayer;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.client.entity.player.PlayerLocal;
 import net.minecraft.client.render.LightmapHelper;
 import net.minecraft.client.render.entity.MobRenderer;
 import net.minecraft.client.render.entity.MobRendererPlayer;
@@ -61,10 +63,12 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 		method = "renderSpecials(Lnet/minecraft/core/entity/player/Player;F)V",
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/core/player/inventory/container/ContainerInventory;getCurrentItem()Lnet/minecraft/core/item/ItemStack;")
 	)
-	public void renderItem(Player player, float partialTick, CallbackInfo ci){
-		data =  modelCache.get(player.uuid);
-		if(data == null) modelCache.put(player.uuid, data = new PlayerData());
+	public void renderItem (Player player, float partialTick, CallbackInfo ci) {
+		//data =  modelCache.get(player.uuid);
+		//if(data == null) modelCache.put(player.uuid, data = new PlayerData(player));
 
+		data = ((IPlayer)player).getData();
+		if (data == null) return;
 
 		if (isValidTool(data.getHolsteredItem(), player)) {
 			GL11.glPushMatrix();
@@ -73,8 +77,11 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 
 			ItemModel model = ItemModelDispatcher.getInstance().getDispatch(data.getHolsteredItem());
 
-			//getSideHolsterTransform(model, player);
-			getBackHolsterTransform(model, player); //TODO control this with configs, sync configs in multiplayer
+			if (data.isBackHolster()) {
+				getBackHolsterTransform(model, player);
+			}else {
+				getSideHolsterTransform(model, player);
+			}
 
 			/*boolean hasChestplate = player.inventory.armorItemInSlot(2) != null && !(player.inventory.armorItemInSlot(2).getItem() instanceof ItemQuiver);
 
@@ -113,19 +120,21 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 			GL11.glPopMatrix();
 		}
 
-		ItemStack currentItem = player.getCurrentEquippedItem();
+		if (player instanceof PlayerLocal) {
+			ItemStack currentItem = player.getCurrentEquippedItem();
 
-		if((data.getOldItem() == null || currentItem == null || !data.getOldItem().isStackEqual(currentItem))){
-			if(isValidTool(data.getOldItem(), player)){
-				data.setHolsteredItem(data.getOldItem());
-				//data.holsteredItem = data.oldItem;
-			}else if(data.getHolsteredItem() != null && currentItem != null && data.getHolsteredItem().isStackEqual(currentItem)){
-				data.setHolsteredItem(null);
-				//data.holsteredItem = null;
+			if ((data.getOldItem() == null || currentItem == null || !data.getOldItem().isStackEqual(currentItem))) {
+				if (isValidTool(data.getOldItem(), player)) {
+					data.setHolsteredItem(data.getOldItem());
+					//data.holsteredItem = data.oldItem;
+				} else if (data.getHolsteredItem() != null && currentItem != null && data.getHolsteredItem().isStackEqual(currentItem)) {
+					data.setHolsteredItem(null);
+					//data.holsteredItem = null;
+				}
 			}
-		}
 
-		data.setOldItem(player.getCurrentEquippedItem());
+			data.setOldItem(player.getCurrentEquippedItem());
+		}
 		//data.oldItem = player.getCurrentEquippedItem();
 	}
 
@@ -139,11 +148,13 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 		boolean hasChestplate = player.inventory.armorItemInSlot(2) != null && !(player.inventory.armorItemInSlot(2).getItem() instanceof ItemQuiver);
 
 		//boolean full3D = model instanceof ItemModelBow || model instanceof ItemModelStandard && ((ItemModelStandardAccessor)model).getBFull3D();
-		boolean full3D = THConfig.isFull3D(model.item.id, player.uuid);
+		//boolean full3D = THConfig.isFull3D(model.item.id, player.uuid);
+		boolean full3D = data.isFull3D();
 		float scale = (full3D ? 0.625F : 0.375F) * 1.5F;
 		float torsoOffset = full3D ? 0 : -1/32F;
 
-		boolean mirrorRender = THConfig.instance.mirrorRender;
+		//boolean mirrorRender = THConfig.instance.mirrorRender;
+		boolean mirrorRender = data.isMirrored();
 
 		GL11.glTranslatef(-0.51F, -0.22F, hasChestplate ? 4/16F + torsoOffset : 3/16F - 0.01F + torsoOffset);
 
@@ -174,11 +185,13 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 		boolean hasChestplate = false;
 
 		//boolean full3D = model instanceof ItemModelBow || model instanceof ItemModelStandard && ((ItemModelStandardAccessor)model).getBFull3D();
-		boolean full3D = THConfig.isFull3D(model.item.id, player.uuid);
+		//THConfig.isFull3D(model.item.id, player.uuid);
+		boolean full3D = data.isFull3D();
 		float scale = (full3D ? 0.625F : 0.375F) * 1.5F;
 		float torsoOffset = full3D ? 0 : -1/32F;
 
 		//boolean mirrorRender = THConfig.instance.mirrorRender;
+		boolean mirrorRender = data.isMirrored();
 
 		GL11.glTranslatef(-0.285F, 0.28F, hasChestplate ? 4/16F + torsoOffset : 1/64F - 0.01F + torsoOffset);
 
@@ -209,7 +222,7 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 
 	@Unique
 	private boolean isValidTool(@Nullable ItemStack stack, @NotNull Player player){
-		return stack != null && stack.itemID >= 16384 && THConfig.isHolstered(stack.itemID, player.uuid);
+		return stack != null && stack.itemID >= 16384 && /*THConfig.isHolstered(stack.itemID, player.uuid)*/ true;
 		//return stack != null && (stack.getItem() instanceof ItemTool || stack.getItem() instanceof ItemToolSword || stack.getItem() instanceof ItemBow);
 	}
 

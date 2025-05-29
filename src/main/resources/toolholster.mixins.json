@@ -7,13 +7,20 @@
     "ContainerInventoryMixin",
     "ItemStackMixin",
     "MenuAbstractMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "PlayerRemoteMixin"
   ],
   "client": [
     "CubeAccessor",
-    "MobRendererPlayerMixin"
+    "MobRendererPlayerMixin",
+    "PacketHandlerClientMixin",
+    "PlayerLocalMultiplayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "server": [
+    "PacketHandlerLoginMixin",
+    "PlayerServerMixin"
+  ]
 }
