@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = PacketHandlerLogin.class, remap = false)
 public abstract class PacketHandlerLoginMixin {
 
-	@Inject(method = "doLogin", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/handler/PacketHandlerServer;sendPacket(Lnet/minecraft/core/net/packet/Packet;)V"))
+	@Inject(method = "doLogin", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/handler/PacketHandlerServer;sendPacket(Lnet/minecraft/core/net/packet/Packet;)V", ordinal = 13))
 	public void sendModInstalledPacket(PacketLogin loginPacket, CallbackInfo ci, @Local(name = "player") PlayerServer player) {
 		THServer.sendModPresentPacket(player.playerNetServerHandler);
 	}

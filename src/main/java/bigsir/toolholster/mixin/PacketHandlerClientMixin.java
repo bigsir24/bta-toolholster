@@ -11,6 +11,7 @@ import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.net.packet.PacketContainerSetSlot;
 import net.minecraft.core.net.packet.PacketCustomPayload;
+import net.minecraft.core.net.packet.PacketPreLogin;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,6 +28,11 @@ public abstract class PacketHandlerClientMixin {
 	@Inject(method = "handleCustomPayload", at = @At("HEAD"))
 	public void handlePacket(PacketCustomPayload customPayloadPacket, CallbackInfo ci) {
 		THClient.receiveModPresentPacket(customPayloadPacket);
+	}
+
+	@Inject(method = "handleHandshake", at = @At("HEAD"))
+	public void preConnect(PacketPreLogin preLoginPacket, CallbackInfo ci) {
+		THClient.preConnect();
 	}
 
 	@Inject(method = "handleSetSlot", at = @At(value = "HEAD"))

@@ -28,6 +28,15 @@ import static bigsir.toolholster.ToolHolster.MOD_ID;
 @Environment(EnvType.CLIENT)
 public class THClient implements ClientStartEntrypoint {
 	private static final Map<IDKey, ItemConfig> config = new HashMap<>();
+	private static boolean serverModPresent = false;
+
+	public static void preConnect() {
+		serverModPresent = false;
+	}
+
+	public static boolean isServerModPresent() {
+		return serverModPresent;
+	}
 
 	public static byte getFlags(@Nullable ItemStack stack) {
 		return stack == null ? 0 : getFlags(stack.itemID);
@@ -67,6 +76,7 @@ public class THClient implements ClientStartEntrypoint {
 		String string = new String(packet.data, StandardCharsets.UTF_8);
 		if ("HELLO".equals(string)) {
 			 sendConfigMessage(THConfig.getConfigList());
+			 serverModPresent = true;
 		}
 	}
 
