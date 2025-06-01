@@ -1,4 +1,4 @@
-package bigsir.toolholster.mixin;
+package bigsir.toolholster.mixin.player;
 
 import bigsir.toolholster.interfaces.IPlayer;
 import net.minecraft.client.entity.player.PlayerRemote;

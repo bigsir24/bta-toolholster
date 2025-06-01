@@ -77,7 +77,7 @@ public final class Pointer<T> /*T should implement IPointerStorage*/ {
 		Pointer<T> ptr = fromStore.getPointer();
 		fromStore.clearReference();
 		toStore.setPointer(ptr);
-		if (ptr != null) ptr.item = (T) to;
+		if (ptr != null && to.equals(ptr.item)) ptr.item = (T) to;
 	}
 
 	private IPointerStorage<T> ptrStorage(T o) {

@@ -60,11 +60,10 @@ public class HolsterMessage implements NetworkMessage {
 
 		//Do not process own packets, handle locally
 		Player player = context.player.world.getPlayerEntityByUUID(this.playerUUID);
-		if (player == Minecraft.getMinecraft().thePlayer) return;
+		//if (player == Minecraft.getMinecraft().thePlayer) return;
 
 		PlayerData data = ((IPlayer)player).getData();
 		data.setHolsteredItem(this.stack);
 		data.flags = this.flags;
-		//TODO save flags for rendering
 	}
 }

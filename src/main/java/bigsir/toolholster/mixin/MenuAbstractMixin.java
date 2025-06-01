@@ -2,6 +2,7 @@ package bigsir.toolholster.mixin;
 
 import bigsir.toolholster.ToolHolster;
 import bigsir.toolholster.core.data.Pointer;
+import bigsir.toolholster.interfaces.IPointerStorage;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.InventoryAction;
 import net.minecraft.core.entity.player.Player;
@@ -35,7 +36,7 @@ public abstract class MenuAbstractMixin {
 	public void passPtrShiftMove(InventoryAction action, Slot slot, int target, Player player, CallbackInfo ci, @Local(name = "item") ItemStack item) {
 		if (lastSlot != null) {
 			if (!(lastSlot.getContainer() instanceof ContainerInventory)) {
-				Pointer.delete(ToolHolster.cast(slot.getItemStack()));
+				Pointer.delete(slot.getItemStack());
 			}else {
 				Pointer.transfer(slot.getItemStack(), lastSlot.getItemStack());
 			}

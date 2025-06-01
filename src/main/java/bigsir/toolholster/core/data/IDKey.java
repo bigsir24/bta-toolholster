@@ -1,4 +1,4 @@
-package bigsir.toolholster.server.data;
+package bigsir.toolholster.core.data;
 
 import net.minecraft.core.item.Item;
 

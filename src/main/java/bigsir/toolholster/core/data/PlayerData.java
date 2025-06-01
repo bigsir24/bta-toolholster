@@ -20,12 +20,7 @@ public class PlayerData implements IPointerListener {
 	}
 
 	@Override
-	public void onChange() {
-		/*if (EnvironmentHelper.isServerEnvironment()) {
-			HolsterMessage message = new HolsterMessage(player.uuid, holsteredItemPtr.get(), (byte)1);
-			NetworkHandler.sendToAllPlayers(message);
-		}*/
-	}
+	public void onChange() {}
 
 	public boolean isFull3D() {
 		return (this.flags & FULL_3D_MASK) != 0;
@@ -50,11 +45,6 @@ public class PlayerData implements IPointerListener {
 
 	public void setHolsteredItem(@Nullable ItemStack holsteredItem) {
 		this.holsteredItemPtr.set(holsteredItem);
-
-		/*if (EnvironmentHelper.isServerEnvironment()) {
-			HolsterMessage message = new HolsterMessage(player.uuid, holsteredItem, (byte)1);
-			NetworkHandler.sendToAllPlayers(message);
-		}*/
 	}
 
 	public @Nullable ItemStack getHolsteredItem() {

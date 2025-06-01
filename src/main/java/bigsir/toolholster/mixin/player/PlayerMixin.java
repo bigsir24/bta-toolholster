@@ -1,9 +1,11 @@
-package bigsir.toolholster.mixin;
+package bigsir.toolholster.mixin.player;
 
 import bigsir.toolholster.ToolHolster;
+import bigsir.toolholster.client.THClient;
 import bigsir.toolholster.core.data.PlayerData;
 import bigsir.toolholster.core.data.Pointer;
 import bigsir.toolholster.interfaces.IPlayer;
+import net.minecraft.client.entity.player.PlayerLocal;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.Mob;
 import net.minecraft.core.entity.player.Player;
@@ -46,12 +48,12 @@ public abstract class PlayerMixin extends Mob implements IPlayer {
 
 	@Inject(method = "defineSynchedData", at = @At("TAIL"))
 	public void synchedData(CallbackInfo ci) {
-		this.entityData.define(19, null, ItemStack.class);
+		//this.entityData.define(19, null, ItemStack.class);
 	}
 
 	@Override
 	public void setItem(@Nullable ItemStack stack) {
-		this.entityData.set(19, stack);
+		//this.entityData.set(19, stack);
 	}
 
 	@Override

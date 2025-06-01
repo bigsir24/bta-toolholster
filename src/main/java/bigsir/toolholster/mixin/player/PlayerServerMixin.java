@@ -1,8 +1,9 @@
-package bigsir.toolholster.mixin;
+package bigsir.toolholster.mixin.player;
 
 import bigsir.toolholster.ToolHolster;
 import bigsir.toolholster.core.data.PlayerData;
 import bigsir.toolholster.interfaces.IPlayer;
+import bigsir.toolholster.server.THServer;
 import bigsir.toolholster.server.data.PlayerDataServer;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;
@@ -28,11 +29,11 @@ public abstract class PlayerServerMixin extends Player implements IPlayer {
 		PlayerData data = this.getData();
 
 		if((data.getOldItem() == null || currentItem == null || !data.getOldItem().isStackEqual(currentItem))){
-			if(ToolHolster.isValidTool(data.getOldItem(), thisRef)){
+			if(THServer.doHolster(thisRef, data.getOldItem())){
 				data.setHolsteredItem(data.getOldItem());
 			}else if(data.getHolsteredItem() != null && currentItem != null && data.getHolsteredItem().isStackEqual(currentItem)){
 				data.setHolsteredItem(null);
-				System.out.println("called");
+				//System.out.println("called");
 			}
 		}
 

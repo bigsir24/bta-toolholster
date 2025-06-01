@@ -1,30 +1,27 @@
-package bigsir.toolholster.server.data;
+package bigsir.toolholster.client.data;
 
+import bigsir.toolholster.client.THClient;
 import bigsir.toolholster.core.data.PlayerData;
-import bigsir.toolholster.server.THServer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@Environment(EnvType.SERVER)
-public class PlayerDataServer extends PlayerData {
-	public PlayerDataServer(Player player) {
+@Environment(EnvType.CLIENT)
+public class PlayerDataClient extends PlayerData {
+	public PlayerDataClient(Player player) {
 		super(player);
 	}
 
 	@Override
 	public void onChange() {
-		super.onChange();
-
-		THServer.sendHolsterMessage(this);
+		this.flags = THClient.getFlags(this.holsteredItemPtr.get());
 	}
 
 	@Override
 	public void setHolsteredItem(@Nullable ItemStack holsteredItem) {
 		super.setHolsteredItem(holsteredItem);
-
-		THServer.sendHolsterMessage(this);
+		this.flags = THClient.getFlags(holsteredItem);
 	}
 }

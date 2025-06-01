@@ -1,10 +1,13 @@
 package bigsir.toolholster.mixin;
 
+import bigsir.toolholster.client.THClient;
 import bigsir.toolholster.core.data.PlayerData;
 import bigsir.toolholster.client.config.THConfig;
 import bigsir.toolholster.interfaces.IPlayer;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.entity.player.PlayerLocal;
+import net.minecraft.client.entity.player.PlayerLocalMultiplayer;
+import net.minecraft.client.render.Lighting;
 import net.minecraft.client.render.LightmapHelper;
 import net.minecraft.client.render.entity.MobRenderer;
 import net.minecraft.client.render.entity.MobRendererPlayer;
@@ -20,6 +23,7 @@ import net.minecraft.core.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -70,7 +74,7 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 		data = ((IPlayer)player).getData();
 		if (data == null) return;
 
-		if (isValidTool(data.getHolsteredItem(), player)) {
+		if (THClient.doHolster(data.getHolsteredItem())) {
 			GL11.glPushMatrix();
 
 			this.modelBipedMain.body.translateTo(0.0625F);
@@ -115,16 +119,18 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 			GL11.glTranslatef(-0.5F * 1, -0.5F * 1, -0.03125F * 1);*/
 
 			float brightness = LightmapHelper.isLightmapEnabled() ? 1.0F : player.getBrightness(partialTick);
-
 			model.renderItemInWorld(Tessellator.instance, player, data.getHolsteredItem(), brightness, 1.0F, false);
+
+			//renderItemInWorld disables this, which breaks item rendering because it doesn't enable it again
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			GL11.glPopMatrix();
 		}
 
-		if (player instanceof PlayerLocal) {
+		/*if (player instanceof PlayerLocal && !(player instanceof PlayerLocalMultiplayer)) {
 			ItemStack currentItem = player.getCurrentEquippedItem();
 
 			if ((data.getOldItem() == null || currentItem == null || !data.getOldItem().isStackEqual(currentItem))) {
-				if (isValidTool(data.getOldItem(), player)) {
+				if (THClient.doHolster(data.getOldItem())) {
 					data.setHolsteredItem(data.getOldItem());
 					//data.holsteredItem = data.oldItem;
 				} else if (data.getHolsteredItem() != null && currentItem != null && data.getHolsteredItem().isStackEqual(currentItem)) {
@@ -134,7 +140,7 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 			}
 
 			data.setOldItem(player.getCurrentEquippedItem());
-		}
+		}*/
 		//data.oldItem = player.getCurrentEquippedItem();
 	}
 
@@ -222,7 +228,7 @@ public abstract class MobRendererPlayerMixin extends MobRenderer<Player> {
 
 	@Unique
 	private boolean isValidTool(@Nullable ItemStack stack, @NotNull Player player){
-		return stack != null && stack.itemID >= 16384 && /*THConfig.isHolstered(stack.itemID, player.uuid)*/ true;
+		return stack != null && stack.itemID >= 16384 && THConfig.isHolstered(stack.itemID, player.uuid);
 		//return stack != null && (stack.getItem() instanceof ItemTool || stack.getItem() instanceof ItemToolSword || stack.getItem() instanceof ItemBow);
 	}
 
