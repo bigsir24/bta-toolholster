@@ -8,21 +8,21 @@
     "ItemStackMixin",
     "MenuAbstractMixin",
     "SlotAccessor",
-    "player.PlayerMixin",
-    "player.PlayerRemoteMixin"
+    "player.PlayerMixin"
   ],
   "client": [
+    "player.PlayerRemoteMixin",
     "player.PlayerMixinClient",
     "MobRendererPlayerMixin",
     "PacketHandlerClientMixin",
     "player.PlayerLocalMixin",
     "player.PlayerLocalMultiplayerMixin"
   ],
-  "injectors": {
-    "defaultRequire": 1
-  },
   "server": [
     "PacketHandlerLoginMixin",
     "player.PlayerServerMixin"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
